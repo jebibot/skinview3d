@@ -1,12 +1,12 @@
-import type { ModelType } from "skinview-utils";
-import { BoxGeometry, BufferAttribute, DoubleSide, FrontSide, Group, Mesh, MeshStandardMaterial, Object3D, Texture, Vector2 } from "three";
+import type { ModelType } from "@jebibot/skinview-utils";
+import { BoxGeometry, BufferAttribute, DoubleSide, FrontSide, Group, Mesh, MeshStandardMaterial, Object3D, Texture } from "three";
 
 function setUVs(box: BoxGeometry, u: number, v: number, width: number, height: number, depth: number, textureWidth: number, textureHeight: number): void {
 	const toFaceVertices = (x1: number, y1: number, x2: number, y2: number) => [
-		new Vector2(x1 / textureWidth, 1.0 - y2 / textureHeight),
-		new Vector2(x2 / textureWidth, 1.0 - y2 / textureHeight),
-		new Vector2(x2 / textureWidth, 1.0 - y1 / textureHeight),
-		new Vector2(x1 / textureWidth, 1.0 - y1 / textureHeight)
+		[x1 / textureWidth, 1.0 - y2 / textureHeight],
+		[x2 / textureWidth, 1.0 - y2 / textureHeight],
+		[x2 / textureWidth, 1.0 - y1 / textureHeight],
+		[x1 / textureWidth, 1.0 - y1 / textureHeight]
 	];
 
 	const top = toFaceVertices(u + depth, v, u + width + depth, v + depth);
@@ -17,14 +17,14 @@ function setUVs(box: BoxGeometry, u: number, v: number, width: number, height: n
 	const back = toFaceVertices(u + width + depth * 2, v + depth, u + width * 2 + depth * 2, v + height + depth);
 
 	const uvAttr = box.attributes.uv as BufferAttribute;
-	uvAttr.copyVector2sArray([
+	uvAttr.set([
 		right[3], right[2], right[0], right[1],
 		left[3], left[2], left[0], left[1],
 		top[3], top[2], top[0], top[1],
 		bottom[0], bottom[1], bottom[3], bottom[2],
 		front[3], front[2], front[0], front[1],
 		back[3], back[2], back[0], back[1]
-	]);
+	].flat());
 	uvAttr.needsUpdate = true;
 }
 
