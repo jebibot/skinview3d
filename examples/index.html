@@ -153,15 +153,6 @@
 		</div>
 
 		<div class="control-section">
-			<h1>Mouse Control</h1>
-			<div class="control">
-				<label><input type="checkbox" id="control_rotate" checked> Enable Rotate</label>
-				<label><input type="checkbox" id="control_zoom" checked> Enable Zoom</label>
-				<label><input type="checkbox" id="control_pan"> Enable Pan</label>
-			</div>
-		</div>
-
-		<div class="control-section">
 			<h1>Skin Layers</h1>
 			<table id="layers_table">
 				<thead>
@@ -464,9 +455,6 @@
 					skinViewer.animation.speed = e.target.value;
 				}
 			});
-			document.getElementById("control_rotate").addEventListener("change", e => skinViewer.controls.enableRotate = e.target.checked);
-			document.getElementById("control_zoom").addEventListener("change", e => skinViewer.controls.enableZoom = e.target.checked);
-			document.getElementById("control_pan").addEventListener("change", e => skinViewer.controls.enablePan = e.target.checked);
 			for (const part of skinParts) {
 				for (const layer of skinLayers) {
 					document.querySelector(`#layers_table input[type="checkbox"][data-part="${part}"][data-layer="${layer}"]`)
@@ -539,9 +527,6 @@
 				skinViewer.animation = availableAnimations[animationName];
 				skinViewer.animation.speed = document.getElementById("animation_speed").value;
 			}
-			skinViewer.controls.enableRotate = document.getElementById("control_rotate").checked;
-			skinViewer.controls.enableZoom = document.getElementById("control_zoom").checked;
-			skinViewer.controls.enablePan = document.getElementById("control_pan").checked;
 			for (const part of skinParts) {
 				for (const layer of skinLayers) {
 					skinViewer.playerObject.skin[part][layer].visible =
