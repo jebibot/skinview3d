@@ -7,7 +7,6 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import { PlayerAnimation } from "./animation.js";
 import { type BackEquipment, PlayerObject } from "./model.js";
-import { NameTagObject } from "./nametag.js";
 
 export interface LoadOptions {
 
@@ -212,14 +211,6 @@ export interface SkinViewerOptions {
 	 * @defaultValue If unspecified, no animation will be played.
 	 */
 	animation?: PlayerAnimation;
-
-	/**
-	 * The name tag to display above the player.
-	 *
-	 * @defaultValue If unspecified, no name tag will be displayed.
-	 * @see {@link SkinViewer.nameTag}
-	 */
-	nameTag?: NameTagObject | string;
 }
 
 /**
@@ -300,8 +291,6 @@ export class SkinViewer {
 	private _pixelRatio: number | "match-device";
 	private devicePixelRatioQuery: MediaQueryList | null;
 	private onDevicePixelRatioChange: () => void;
-
-	private _nameTag: NameTagObject | null = null;
 
 	constructor(options: SkinViewerOptions = {}) {
 		this.canvas = options.canvas === undefined ? document.createElement("canvas") : options.canvas;
@@ -399,9 +388,6 @@ export class SkinViewer {
 		}
 		if (options.panorama !== undefined) {
 			this.loadPanorama(options.panorama);
-		}
-		if (options.nameTag !== undefined) {
-			this.nameTag = options.nameTag;
 		}
 		this.camera.position.z = 1;
 		this._zoom = options.zoom === undefined ? 0.9 : options.zoom;
@@ -824,42 +810,5 @@ export class SkinViewer {
 			animation.progress = 0;
 		}
 		this._animation = animation;
-	}
-
-	/**
-	 * The name tag to display above the player, or `null` if there is none.
-	 *
-	 * When setting this property to a `string` value, a {@link NameTagObject}
-	 * will be automatically created with default options.
-	 *
-	 * @example
-	 * ```
-	 * skinViewer.nameTag = "hello";
-	 * skinViewer.nameTag = new NameTagObject("hello", { textStyle: "yellow" });
-	 * skinViewer.nameTag = null;
-	 * ```
-	 */
-	get nameTag(): NameTagObject | null {
-		return this._nameTag;
-	}
-
-	set nameTag(newVal: NameTagObject | string | null) {
-		if (this._nameTag !== null) {
-			// Remove the old name tag from the scene
-			this.playerWrapper.remove(this._nameTag);
-		}
-
-		if (newVal !== null) {
-			if (!(newVal instanceof Object3D)) {
-				newVal = new NameTagObject(newVal);
-			}
-
-			// Add the new name tag to the scene
-			this.playerWrapper.add(newVal);
-			// Set y position
-			newVal.position.y = 20;
-		}
-
-		this._nameTag = newVal;
 	}
 }

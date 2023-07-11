@@ -295,13 +295,6 @@
 		</div>
 
 		<div class="control-section">
-			<h1>Name Tag</h1>
-			<div class="control">
-				<label>Text: <input id="nametag_text" type="text" value="" placeholder="none" size="20"></label>
-			</div>
-		</div>
-
-		<div class="control-section">
 			<h1>Other examples</h1>
 			<ul>
 				<li><a href="offscreen-render.html">offscreen-render</a></li>
@@ -446,15 +439,6 @@
 			}
 		}
 
-		function reloadNameTag() {
-			const text = document.getElementById("nametag_text").value;
-			if (text === "") {
-				skinViewer.nameTag = null;
-			} else {
-				skinViewer.nameTag = text;
-			}
-		}
-
 		function initializeControls() {
 			document.getElementById("canvas_width").addEventListener("change", e => skinViewer.width = e.target.value);
 			document.getElementById("canvas_height").addEventListener("change", e => skinViewer.height = e.target.value);
@@ -535,8 +519,6 @@
 				skinViewer.dispose();
 				initializeViewer();
 			});
-
-			document.getElementById("nametag_text").addEventListener("change", () => reloadNameTag());
 		}
 
 		function initializeViewer() {
@@ -570,7 +552,6 @@
 			reloadCape();
 			reloadEars(true);
 			reloadPanorama();
-			reloadNameTag();
 		}
 
 		initializeControls();
