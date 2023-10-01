@@ -1,6 +1,7 @@
 import { inferModelType, isTextureSource, loadCapeToCanvas, loadEarsToCanvas, loadEarsToCanvasFromSkin, loadImage, loadSkinToCanvas, type ModelType, type RemoteImage, type TextureSource } from "@jebibot/skinview-utils";
 import { Color, type ColorRepresentation, PointLight, EquirectangularReflectionMapping, Group, NearestFilter, PerspectiveCamera, Scene, Texture, Vector2, WebGLRenderer, AmbientLight, type Mapping, CanvasTexture, WebGLRenderTarget, FloatType, DepthTexture, Clock } from "three";
-import { EffectComposer, FullScreenQuad } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
@@ -229,7 +230,7 @@ export class SkinViewer {
 	 */
 	readonly playerWrapper: Group;
 
-	readonly globalLight: AmbientLight = new AmbientLight(0xffffff, 0.4);
+	readonly globalLight: AmbientLight = new AmbientLight(0xffffff, 3);
 	readonly cameraLight: PointLight = new PointLight(0xffffff, 0.6);
 
 	readonly composer: EffectComposer;
