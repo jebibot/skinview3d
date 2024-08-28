@@ -1,5 +1,6 @@
 import { inferModelType, isTextureSource, loadCapeToCanvas, loadEarsToCanvas, loadEarsToCanvasFromSkin, loadImage, loadSkinToCanvas, type ModelType, type RemoteImage, type TextureSource } from "@jebibot/skinview-utils";
 import { Color, type ColorRepresentation, PointLight, EquirectangularReflectionMapping, Group, NearestFilter, PerspectiveCamera, Scene, Texture, Vector2, WebGLRenderer, AmbientLight, type Mapping, CanvasTexture, WebGLRenderTarget, FloatType, DepthTexture, Clock } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -196,6 +197,16 @@ export interface SkinViewerOptions {
 	zoom?: number;
 
 	/**
+	 * Whether to enable mouse control function.
+	 *
+	 * This function is implemented using {@link OrbitControls}.
+	 * By default, zooming and rotating are enabled, and panning is disabled.
+	 *
+	 * @defaultValue `true`
+	 */
+	enableControls?: boolean;
+
+	/**
 	 * The animation to play on the player.
 	 *
 	 * @defaultValue If unspecified, no animation will be played.
@@ -218,6 +229,13 @@ export class SkinViewer {
 	readonly camera: PerspectiveCamera;
 
 	readonly renderer: WebGLRenderer;
+
+	/**
+	 * The OrbitControls component which is used to implement the mouse control function.
+	 *
+	 * @see {@link https://threejs.org/docs/#examples/en/controls/OrbitControls | OrbitControls - three.js docs}
+	 */
+	readonly controls: OrbitControls;
 
 	/**
 	 * The player object.
@@ -336,6 +354,15 @@ export class SkinViewer {
 		this.playerWrapper = new Group();
 		this.playerWrapper.add(this.playerObject);
 		this.scene.add(this.playerWrapper);
+
+		this.controls = new OrbitControls(this.camera, this.canvas);
+		this.controls.enablePan = false; // disable pan by default
+		this.controls.minDistance = 10;
+		this.controls.maxDistance = 256;
+
+		if (options.enableControls === false) {
+			this.controls.enabled = false;
+		}
 
 		if (options.skin !== undefined) {
 			this.loadSkin(options.skin, {
@@ -598,6 +625,7 @@ export class SkinViewer {
 		if (this.autoRotate) {
 			this.playerWrapper.rotation.y += dt * this.autoRotateSpeed;
 		}
+		this.controls.update();
 		this.render();
 		this.animationID = window.requestAnimationFrame(() => this.draw());
 	}
@@ -633,6 +661,7 @@ export class SkinViewer {
 			this.animationID = null;
 		}
 
+		this.controls.dispose();
 		this.renderer.dispose();
 		this.resetSkin();
 		this.resetCape();
