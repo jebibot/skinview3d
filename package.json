@@ -1,6 +1,6 @@
 {
 	"name": "@jebibot/skinview3d",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"description": "Three.js powered Minecraft skin viewer",
 	"main": "libs/skinview3d.js",
 	"type": "module",
